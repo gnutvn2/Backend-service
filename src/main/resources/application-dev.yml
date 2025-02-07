@@ -1,18 +1,24 @@
+api:
+  version: v1.0
+
 spring:
   config:
     activate:
       on-profile: dev
   devtools:
     add-properties: true
-  # cau hinh moi truong (jpa co the khong can thiet)
+  # cau hinh moi truong
+  datasource:
+    url: jdbc:postgresql://localhost:5439/postgres
+    username: postgres
+    password: 123
   jpa:
-    database-platform: org.hibernate.dialect.H2Dialect
-    hibernate:
-      ddl-auto: update
-    show-sql: false
     properties:
       hibernate:
-        format_sql: true
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+    show-sql: false
+    hibernate:
+      ddl-auto: update
 
 # application-dev.yml
 springdoc:
@@ -27,5 +33,5 @@ openapi:
     title: Backend service
     version: 1.0.0
 
-jwt:
-  secretKey: ${SECRET_KEY_ACCESS_TOKEN:abc@123}
+#jwt:
+#  secretKey: ${SECRET_KEY_ACCESS_TOKEN:abc@123}
