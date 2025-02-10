@@ -33,5 +33,8 @@ openapi:
     title: Backend service
     version: 1.0.0
 
-#jwt:
-#  secretKey: ${SECRET_KEY_ACCESS_TOKEN:abc@123}
+jwt:
+  expiryMinutes: 60
+  expiryDay: 14
+  accessToken: ${SECRET_KEY_ACCESS_TOKEN:DUMMY_ACCESS_KEY}
+  refreshToken: ${SECRET_KEY_REFRESH_TOKEN:DUMMY_REFRESH_KEY}

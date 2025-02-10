@@ -6,6 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -34,6 +35,7 @@ import java.util.regex.Pattern;
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final AddressRepository addressRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public UserPageResponse getAll(String keyword, String sort, int page, int size) {
@@ -106,7 +108,7 @@ public class UserServiceImpl implements UserService {
         user.setPhone(userCreateRequest.getPhone());
         user.setEmail(userCreateRequest.getEmail());
         user.setUsername(userCreateRequest.getUsername());
-        user.setPassword(userCreateRequest.getPassword());
+        user.setPassword(passwordEncoder.encode(userCreateRequest.getPassword()));
         user.setUserStatus(userCreateRequest.getUserStatus());
         user.setUserType(userCreateRequest.getUserType());
         User userSave = userRepository.save(user);
@@ -203,7 +205,7 @@ public class UserServiceImpl implements UserService {
      * @param size
      * @param users
      * @return
-     **/
+     */
     private static UserPageResponse getUserPageResponse(int page, int size, Page<User> users) {
         log.info("getUserPageResponse page");
         List<UserResponse> userList = users.stream().map(u -> UserResponse.builder()
