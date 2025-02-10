@@ -7,6 +7,7 @@ import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import vn.tungnv.backend_service.common.UserStatus;
@@ -25,7 +26,7 @@ import vn.tungnv.backend_service.service.UserService;
 public class UserController {
 
     private final UserService userService;
-
+    @PreAuthorize("hasAuthority('Admin')")
     @Operation(summary = "Get all user", description = "Description")
     @GetMapping("/list")
     public ApiResponse getAllUsers(@RequestParam(required = false) String keyword,
@@ -44,6 +45,7 @@ public class UserController {
     }
 
     @Operation(summary = "Create user", description = "API add new user to database")
+    @PreAuthorize("hasAnyAuthority('Admin', 'Owner')")
     @PostMapping("/create")
     public ApiResponse createUser(@RequestBody @Valid UserCreateRequest request){
         return ApiResponse.builder()
@@ -54,6 +56,7 @@ public class UserController {
     }
 
     @Operation(summary = "Update user", description = "API update user")
+    @PreAuthorize("hasAnyAuthority('Admin', 'User', 'Owner')")
     @PutMapping("/update")
     public ApiResponse putUser(@RequestBody @Valid UserUpdateRequest request){
         this.userService.updateUser(request);
@@ -63,6 +66,7 @@ public class UserController {
                 .build();
     }
 
+    @PreAuthorize("hasAnyAuthority('Admin')")
     @Operation(summary = "Change status user", description = "API change status user")
     @PatchMapping("/patch/{id}")
     public ApiResponse updateUser(@PathVariable("id") Long id, @RequestParam UserStatus status){
@@ -73,6 +77,7 @@ public class UserController {
                 .build();
     }
 
+    @PreAuthorize("hasAuthority('Admin')")
     @Operation(summary = "Delete user", description = "API deleted user")
     @DeleteMapping("/delete/{id}")
     public ApiResponse deleteUser(@PathVariable("id") @Min(value = 1, message = "userId must be equals or greater than 1") Long id){
@@ -84,6 +89,7 @@ public class UserController {
     }
 
     @Operation(summary = "Get user detail", description = "API retrieve user detail by ID from database")
+    @PreAuthorize("hasAnyAuthority('Admin', 'Owner')")
     @GetMapping("/detail/{id}")
     public ApiResponse getUserById(@PathVariable("id") @Min(value = 1, message = "userId must be equals or greater than 1") Long id){
         log.info("Get user detail by ID: {}", id);
