@@ -20,6 +20,25 @@ spring:
     hibernate:
       ddl-auto: update
 
+  #Email sender
+# EMAIL SENDER
+  mail:
+    from: ${MAIL_FROM:DUMMY_MAIL_FROM}
+    host: smtp.gmail.com
+    port: 587
+    username: ${MAIL_USERNAME:DUMMY_MAIL_USERNAME}
+    password: ${MAIL_PASSWORD:DUMMY_MAIL_PASSWORD}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+  servlet:
+    multipart:
+      max-file-size: 50MB
+      max-request-size: 50MB
+
 # application-dev.yml
 springdoc:
   api-docs:
@@ -38,3 +57,5 @@ jwt:
   expiryDay: 14
   accessToken: ${SECRET_KEY_ACCESS_TOKEN:DUMMY_ACCESS_KEY}
   refreshToken: ${SECRET_KEY_REFRESH_TOKEN:DUMMY_REFRESH_KEY}
+
+
