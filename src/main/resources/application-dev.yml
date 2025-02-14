@@ -21,7 +21,6 @@ spring:
       ddl-auto: update
 
   #Email sender
-# EMAIL SENDER
   mail:
     from: ${MAIL_FROM:DUMMY_MAIL_FROM}
     host: smtp.gmail.com
